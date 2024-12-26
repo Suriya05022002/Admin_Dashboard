@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Dashboard</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <meta name="keywords"
+        content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="shortcut icon" href="img/icons/icon-48x48.png" />
+
+    <link rel="canonical" href="https://demo-basic.adminkit.io/" />
+    <link href="css/app.css" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6f42c1;
+            --secondary: #e9ecef;
+            --text: #495057;
+            --border: #dee2e6;
+            --background: #f8f9fa;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+        }
+
+
+        .main-content {
+            transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-primary {
+            background-color: #6f42c1;
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: #e9ecef;
+            color: #495057;
+        }
+
+
+        .bottom-icon {
+            text-align: center;
+            padding: 20px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .bottom-icon i {
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .bottom-icon i:hover {
+            color: #ddd;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .title-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            color: var(--text);
+            font-size: 1.8rem;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+
+        .attendance-grid {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow-x: auto;
+
+        }
+
+        .legend {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th,
+        td {
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        th {
+            background-color: var(--background);
+            font-weight: 600;
+        }
+
+        .employee-name {
+            text-align: left;
+            font-weight: 500;
+            min-width: 150px;
+        }
+
+        .status-icon {
+            width: 24px;
+            height: 24px;
+            margin: 0 auto;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .status-icon:hover {
+            transform: scale(1.2);
+        }
+
+        .present i {
+            color: var(--success);
+        }
+
+        .half-day i {
+            color: var(--warning);
+        }
+
+        .absent i {
+            color: var(--danger);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(111, 66, 193, 0.1);
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .status-icon.animate {
+            animation: pulse 0.5s ease-out;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.3);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+
+
+        /* Updated Responsive Styles */
+        @media (max-width: 768px) {
+           
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .search-container {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            .search-container input {
+                width: 100%;
+            }
+
+            .legend {
+                flex-wrap: wrap;
+            }
+
+            .attendance-grid {
+                padding: 1rem;
+            }
+
+            th,
+            td {
+                padding: 0.5rem;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            
+
+            .search-container {
+                width: 70%;
+
+                left: 50px;
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px;
+            }
+
+
+
+            .header {
+                margin-bottom: 15px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+                margin-bottom: 15px;
+            }
+
+            .actions {
+                flex-direction: row;
+
+                display: flex;
+            }
+
+            .btn {
+
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+
+            .title-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .buttons {
+                flex-direction: row;
+
+                display: flex;
+                width: 100%;
+                gap: 10px;
+            }
+
+            .attendance-grid {
+                padding: 10px;
+                margin: 0 -10px;
+            }
+
+            .legend {
+                flex-direction: column;
+                gap: 5px;
+                margin-bottom: 10px;
+                padding-bottom: 10px;
+            }
+
+            table {
+                font-size: 0.8rem;
+            }
+
+            th,
+            td {
+                padding: 5px;
+            }
+
+            .employee-name {
+                min-width: 80px;
+            }
+
+            .status-icon {
+                width: 20px;
+                height: 20px;
+            }
+
+            .modal-content {
+                padding: 1rem;
+            }
+
+            .form-group {
+                margin-bottom: 1rem;
+            }
+
+            .form-control {
+                padding: 0.6rem;
+            }
+
+            .modal-footer {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .modal-footer .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <nav id="sidebar" class="sidebar js-sidebar">
+            <div class="sidebar-content js-simplebar">
+                <a class="sidebar-brand" href="index.html">
+                    <span class="align-middle">Admin</span>
+                </a>
+
+                <ul class="sidebar-nav">
+                    <li class="sidebar-header">
+                        Pages
+                    </li>
+
+                    <li class="sidebar-item active">
+                        <a class="sidebar-link" href="index.html">
+                            <i class="fas fa-sliders-h align-middle"></i> <span class="align-middle">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="pages-profile.html">
+                            <i class="fas fa-user align-middle"></i> <span class="align-middle">Profile</span>
+                        </a>
+                    </li>
+
+
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="pages-blank.html">
+                            <i class="fas fa-users align-middle"></i> <span class="align-middle">Employees</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="attandance.html">
+                            <i class="fas fa-calendar-alt align-middle"></i> <span class="align-middle">Employee
+                                Attendance</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="Department.html">
+                            <i class="fas fa-briefcase align-middle"></i> <span class="align-middle">Employee
+                                Department</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="Leave.html">
+                            <i class="fas fa-coffee align-middle"></i> <span class="align-middle">Employee Leave
+                                Request</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="salary.html">
+                            <i class="fas fa-dollar-sign align-middle"></i> <span class="align-middle">Employee
+                                Salary</span>
+                        </a>
+                    </li>
+
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="#">
+                            <i class="fas fa-book align-middle"></i> <span class="align-middle">Courses</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="#">
+                            <i class="fas fa-chalkboard-teacher align-middle"></i> <span
+                                class="align-middle">Lessons</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="#">
+                            <i class="fas fa-user-graduate align-middle"></i> <span class="align-middle">Students</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="#">
+                            <i class="fas fa-chart-bar align-middle"></i> <span class="align-middle">Sales Report</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="#">
+                            <i class="fas fa-credit-card align-middle"></i> <span class="align-middle">Payment</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="#">
+                            <i class="fas fa-comment-alt align-middle"></i> <span class="align-middle">Feedback</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+
+        <div class="main">
+			<nav class="navbar navbar-expand navbar-light navbar-bg">
+				<a class="sidebar-toggle js-sidebar-toggle">
+					<i class="hamburger align-self-center"></i>
+				</a>
+
+				<div class="navbar-collapse collapse">
+					<ul class="navbar-nav navbar-align">
+						<li class="nav-item dropdown">
+							<a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
+								<div class="position-relative">
+									<i class="align-middle" data-feather="bell"></i>
+									<span class="indicator">4</span>
+								</div>
+							</a>
+							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0"
+								aria-labelledby="alertsDropdown">
+								<div class="dropdown-menu-header">
+									4 New Notifications
+								</div>
+								<div class="list-group">
+									<a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<i class="text-danger" data-feather="alert-circle"></i>
+											</div>
+											<div class="col-10">
+												<div class="text-dark">Update completed</div>
+												<div class="text-muted small mt-1">Restart server 12 to complete the
+													update.</div>
+												<div class="text-muted small mt-1">30m ago</div>
+											</div>
+										</div>
+									</a>
+									<a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<i class="text-warning" data-feather="bell"></i>
+											</div>
+											<div class="col-10">
+												<div class="text-dark">Lorem ipsum</div>
+												<div class="text-muted small mt-1">Aliquam ex eros, imperdiet vulputate
+													hendrerit et.</div>
+												<div class="text-muted small mt-1">2h ago</div>
+											</div>
+										</div>
+									</a>
+									<a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<i class="text-primary" data-feather="home"></i>
+											</div>
+											<div class="col-10">
+												<div class="text-dark">Login from 192.186.1.8</div>
+												<div class="text-muted small mt-1">5h ago</div>
+											</div>
+										</div>
+									</a>
+									<a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<i class="text-success" data-feather="user-plus"></i>
+											</div>
+											<div class="col-10">
+												<div class="text-dark">New connection</div>
+												<div class="text-muted small mt-1">Christina accepted your request.
+												</div>
+												<div class="text-muted small mt-1">14h ago</div>
+											</div>
+										</div>
+									</a>
+								</div>
+								<div class="dropdown-menu-footer">
+									<a href="#" class="text-muted">Show all notifications</a>
+								</div>
+							</div>
+						</li>
+						<li class="nav-item dropdown">
+							<a class="nav-icon dropdown-toggle" href="#" id="messagesDropdown"
+								data-bs-toggle="dropdown">
+								<div class="position-relative">
+									<i class="align-middle" data-feather="message-square"></i>
+								</div>
+							</a>
+							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0"
+								aria-labelledby="messagesDropdown">
+								<div class="dropdown-menu-header">
+									<div class="position-relative">
+										4 New Messages
+									</div>
+								</div>
+								<div class="list-group">
+									<a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<img src="img/avatars/avatar-5.jpg"
+													class="avatar img-fluid rounded-circle" alt="Vanessa Tucker">
+											</div>
+											<div class="col-10 ps-2">
+												<div class="text-dark">Vanessa Tucker</div>
+												<div class="text-muted small mt-1">Nam pretium turpis et arcu. Duis arcu
+													tortor.</div>
+												<div class="text-muted small mt-1">15m ago</div>
+											</div>
+										</div>
+									</a>
+									<a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<img src="img/avatars/avatar-2.jpg"
+													class="avatar img-fluid rounded-circle" alt="William Harris">
+											</div>
+											<div class="col-10 ps-2">
+												<div class="text-dark">William Harris</div>
+												<div class="text-muted small mt-1">Curabitur ligula sapien euismod
+													vitae.</div>
+												<div class="text-muted small mt-1">2h ago</div>
+											</div>
+										</div>
+									</a>
+									<a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<img src="img/avatars/avatar-4.jpg"
+													class="avatar img-fluid rounded-circle" alt="Christina Mason">
+											</div>
+											<div class="col-10 ps-2">
+												<div class="text-dark">Christina Mason</div>
+												<div class="text-muted small mt-1">Pellentesque auctor neque nec urna.
+												</div>
+												<div class="text-muted small mt-1">4h ago</div>
+											</div>
+										</div>
+									</a>
+									<a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<img src="img/avatars/avatar-3.jpg"
+													class="avatar img-fluid rounded-circle" alt="Sharon Lessman">
+											</div>
+											<div class="col-10 ps-2">
+												<div class="text-dark">Sharon Lessman</div>
+												<div class="text-muted small mt-1">Aenean tellus metus, bibendum sed,
+													posuere ac, mattis non.</div>
+												<div class="text-muted small mt-1">5h ago</div>
+											</div>
+										</div>
+									</a>
+								</div>
+								<div class="dropdown-menu-footer">
+									<a href="#" class="text-muted">Show all messages</a>
+								</div>
+							</div>
+						</li>
+						<li class="nav-item dropdown">
+							<a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#"
+								data-bs-toggle="dropdown">
+								<i class="align-middle" data-feather="settings"></i>
+							</a>
+
+							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#"
+								data-bs-toggle="dropdown">
+								<img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded me-1"
+									alt="Charles Hall" /> <span class="text-dark">Charles Hall</span>
+							</a>
+							<div class="dropdown-menu dropdown-menu-end">
+								<a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1"
+										data-feather="user"></i> Profile</a>
+								<a class="dropdown-item" href="#"><i class="align-middle me-1"
+										data-feather="pie-chart"></i> Analytics</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="index.html"><i class="align-middle me-1"
+										data-feather="settings"></i> Settings & Privacy</a>
+								<a class="dropdown-item" href="#"><i class="align-middle me-1"
+										data-feather="help-circle"></i> Help Center</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="login.html">Log out</a>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</nav>
+
+            <div class="main-content">
+                <div class="container-fluid p-4">
+
+                    <h1>Attendance (Admin)</h1>
+
+
+                    <div class="container">
+
+                        <div class="title-section">
+
+                            <div class="actions m-2">
+                                <button class="btn btn-primary"><i class="fas fa-plus"></i> Add Leave</button>
+                            </div>
+                            
+                            <div class="buttons">
+                                <button class="btn btn-primary" id="editAttendanceBtn">
+                                    <i class="fas fa-edit"></i>
+                                    Edit Attendance
+                                </button>
+
+                                <button class="btn btn-secondary">
+                                    <span>Filter</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="attendance-grid">
+                            <div class="legend">
+                                <div class="legend-item">
+                                    <i class="fas fa-check" style="color: var(--success)"></i>
+                                    <span>Full Day Present</span>
+                                </div>
+                                <div class="legend-item">
+                                    <i class="fas fa-adjust" style="color: var(--warning)"></i>
+                                    <span>Half Day Present</span>
+                                </div>
+                                <div class="legend-item">
+                                    <i class="fas fa-times" style="color: var(--danger)"></i>
+                                    <span>Full Day Absence</span>
+                                </div>
+                            </div>
+
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>EMPLOYEE</th>
+                                        <th>1</th>
+                                        <th>2</th>
+                                        <th>3</th>
+                                        <th>4</th>
+                                        <th>5</th>
+                                        <th>6</th>
+                                        <th>7</th>
+                                        <th>8</th>
+                                        <th>9</th>
+                                        <th>10</th>
+                                        <th>11</th>
+                                        <th>12</th>
+                                        <th>13</th>
+                                        <th>14</th>
+                                        <th>15</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="employee-name">Suriya</td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon half-day"><i class="fas fa-adjust"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon half-day"><i class="fas fa-adjust"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="employee-name">Siva</td>
+                                        <td>
+                                            <div class="status-icon absent"><i class="fas fa-times"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon absent"><i class="fas fa-times"></i></div>
+                                        </td>
+
+
+                                    </tr>
+                                    <tr>
+                                        <td class="employee-name">Saravana</td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon absent"><i class="fas fa-times"></i></div>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="employee-name">Deva</td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon half-day"><i class="fas fa-adjust"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="employee-name">Bala</td>
+                                        <td>
+                                            <div class="status-icon absent"><i class="fas fa-times"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="employee-name">Viswa</td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="employee-name">Hari</td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon half-day"><i class="fas fa-adjust"></i></div>
+                                        </td>
+                                        <td>
+                                            <div class="status-icon present"><i class="fas fa-check"></i></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Edit Attendance Modal -->
+
+                    <div class="modal" id="editModal">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title">Edit Attendance</h2>
+                                <button class="close-modal">&times;</button>
+                            </div>
+                            <form id="editAttendanceForm">
+                                <div class="form-group">
+                                    <label for="employeeName">Employee Name</label>
+                                    <input type="text" id="employeeName" class="form-control" readonly>
+                                </div>
+                                <!-- ... (rest of the form remains unchanged) ... -->
+
+
+                                <div class="form-group">
+                                    <label for="attendanceDate">Select Date</label>
+                                    <input type="date" id="attendanceDate" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="attendanceType">Attendance Type</label>
+                                    <select id="attendanceType" class="form-control" required>
+                                        <option value="present">Full Day Present</option>
+                                        <option value="half">Half Day Present</option>
+                                        <option value="absent">Full Day Absence</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editReason">Edit Reason</label>
+                                    <textarea id="editReason" class="form-control" rows="3" required></textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" id="cancelEdit">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                </div>
+                                <br>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <script src="js/app.js"></script>
+
+        <script>
+            // Modal functionality
+            const modal = document.getElementById('editModal');
+            const editBtn = document.getElementById('editAttendanceBtn');
+            const closeBtn = document.querySelector('.close-modal');
+            const cancelBtn = document.getElementById('cancelEdit');
+            const editForm = document.getElementById('editAttendanceForm');
+
+            // Status icons
+            const statusIcons = document.querySelectorAll('.status-icon');
+
+            // Open modal when clicking Edit Attendance button
+            editBtn.addEventListener('click', () => {
+                modal.classList.add('active');
+                // Set current date as default
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('attendanceDate').value = today;
+            });
+
+            // Close modal functions
+            const closeModal = () => {
+                modal.classList.remove('active');
+            };
+
+            closeBtn.addEventListener('click', closeModal);
+            cancelBtn.addEventListener('click', closeModal);
+
+            // Close modal when clicking outside
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // Handle form submission
+            editForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const formData = {
+                    employeeName: document.getElementById('employeeName').value,
+                    date: document.getElementById('attendanceDate').value,
+                    type: document.getElementById('attendanceType').value,
+                    reason: document.getElementById('editReason').value
+                };
+
+                // Here you would typically send this data to your backend
+                console.log('Form submitted with data:', formData);
+
+                // Update the UI to reflect the change
+                updateAttendanceStatus(formData);
+
+                // Close the modal
+                closeModal();
+
+                // Show success message
+                alert('Attendance updated successfully!');
+            });
+
+            // Function to update attendance status in the table
+            function updateAttendanceStatus(formData) {
+                const row = Array.from(document.querySelectorAll('.employee-name')).find(
+                    cell => cell.textContent === formData.employeeName
+                )?.parentElement;
+
+                if (row) {
+                    const date = new Date(formData.date);
+                    const dayOfMonth = date.getDate();
+                    const cell = row.children[dayOfMonth];
+
+                    if (cell) {
+                        const statusIcon = cell.querySelector('.status-icon');
+                        statusIcon.className = 'status-icon';
+                        statusIcon.innerHTML = '';
+
+                        const icon = document.createElement('i');
+                        icon.className = 'fas';
+
+                        switch (formData.type) {
+                            case 'present':
+                                statusIcon.classList.add('present');
+                                icon.classList.add('fa-check');
+                                break;
+                            case 'half':
+                                statusIcon.classList.add('half-day');
+                                icon.classList.add('fa-adjust');
+                                break;
+                            case 'absent':
+                                statusIcon.classList.add('absent');
+                                icon.classList.add('fa-times');
+                                break;
+                        }
+
+                        statusIcon.appendChild(icon);
+                        statusIcon.classList.add('animate');
+                        setTimeout(() => {
+                            statusIcon.classList.remove('animate');
+                        }, 500);
+                    }
+                }
+            }
+
+            // Make attendance icons clickable to open edit modal
+            statusIcons.forEach(icon => {
+                icon.addEventListener('click', () => {
+                    const row = icon.closest('tr');
+                    const employeeName = row.querySelector('.employee-name').textContent;
+                    const cellIndex = Array.from(icon.parentElement.parentElement.children).indexOf(icon.parentElement);
+
+                    // Set employee name in modal
+                    document.getElementById('employeeName').value = employeeName;
+
+                    // Set date in modal (assuming current month/year)
+                    const date = new Date();
+                    date.setDate(cellIndex);
+                    document.getElementById('attendanceDate').value = date.toISOString().split('T')[0];
+
+                    // Set attendance type based on current status
+                    let attendanceType = 'present';
+                    if (icon.classList.contains('half-day')) {
+                        attendanceType = 'half';
+                    } else if (icon.classList.contains('absent')) {
+                        attendanceType = 'absent';
+                    }
+                    document.getElementById('attendanceType').value = attendanceType;
+
+                    // Open modal
+                    modal.classList.add('active');
+                });
+            });
+
+            // Search functionality
+            const searchInput = document.querySelector('.search-container input');
+            searchInput.addEventListener('input', function () {
+                const searchTerm = this.value.toLowerCase();
+                document.querySelectorAll('tbody tr').forEach(row => {
+                    const employeeName = row.querySelector('.employee-name').textContent.toLowerCase();
+                    if (employeeName.includes(searchTerm)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+
+            // Add fade-in animation to elements on load
+            document.addEventListener('DOMContentLoaded', function () {
+                const elements = document.querySelectorAll('.container > *');
+                elements.forEach((element, index) => {
+                    element.style.opacity = '0';
+                    element.style.animation = `fadeIn 0.5s ease-out ${index * 0.1}s forwards`;
+                });
+            });
+
+            // Responsive table scrolling
+            const table = document.querySelector('table');
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            table.addEventListener('mousedown', (e) => {
+                isDown = true;
+                startX = e.pageX - table.offsetLeft;
+                scrollLeft = table.scrollLeft;
+            });
+
+            table.addEventListener('mouseleave', () => {
+                isDown = false;
+            });
+
+            table.addEventListener('mouseup', () => {
+                isDown = false;
+            });
+
+            table.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - table.offsetLeft;
+                const walk = (x - startX) * 2;
+                table.scrollLeft = scrollLeft - walk;
+            });
+           
+        </script>
+</body>
+
+</html>
